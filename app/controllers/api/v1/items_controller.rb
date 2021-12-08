@@ -24,10 +24,6 @@ class Api::V1::ItemsController < ApplicationController
     render json: Item.delete(params[:id]), status: 204
   end
 
-  def merchant
-    render json: MerchantSerializer.new(Item.find(params[:id]).merchant)
-  end
-
   private
 
   def item_params
