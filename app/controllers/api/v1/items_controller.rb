@@ -1,27 +1,36 @@
 class Api::V1::ItemsController < ApplicationController
   def index
-    render json: Item.all
+    render json: ItemSerializer.new(Item.all)
   end
 
   def show
-    render json: Item.find(params[:id])
+    render json: ItemSerializer.new(Item.find(params[:id]))
   end
 
   def create
-    render json: Item.create(params[item_params]), status: 201
+    render json: ItemSerializer.new(Item.create(item_params)), status: 201
+  end
+
+  def update
+    item = Item.find(params[:id])
+    if item.update_attributes(item_params)
+      render json: ItemSerializer.new(item)
+    else
+      render json: {error: "Item could not be found"}, status: 404
+    end
   end
 
   def destroy
-    render json: Item.delete(params[:id])
+    render json: Item.delete(params[:id]), status: 204
   end
 
   def merchant
-    render json: Item.find(params[:id]).merchant
+    render json: MerchantSerializer.new(Item.find(params[:id]).merchant)
   end
 
   private
 
   def item_params
-    params.permit(:item, :name, :description, :unit_price, :merchant_id)
+    params.permit(:name, :description, :unit_price, :merchant_id)
   end
 end
