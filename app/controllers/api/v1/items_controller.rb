@@ -16,7 +16,7 @@ class Api::V1::ItemsController < ApplicationController
     if item.update_attributes(item_params)
       render json: ItemSerializer.new(item)
     else
-      render json: {error: "Item could not be found"}, status: 404
+      render json: {error: "couldn't update item"}, status: 400
     end
   end
 
